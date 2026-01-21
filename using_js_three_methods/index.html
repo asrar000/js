@@ -1,18 +1,38 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en-US">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
     <title>Apply JavaScript example</title>
-    <script defer src="script.js"></script>
+    <script type="module" src="script.js"></script>
+    <!--
+      This is the best and most modern way of using external JavaScript. 
+      Here, defer is enabled by default, so there is no need to explicitly
+      use the keyword. This approach is recommended. One thing to note is 
+      that it will give you a CORS error if you try to access it without 
+      setting up a server.
+    -->
+    <!--
+      <script defer src="script.js"></script>
+    -->
+    <!--
+      This method is slightly more modern than the old one and is 
+      somewhat better in the sense that it defers execution until the 
+      HTML loads properly. As a result, DOM access is safer than with 
+      the previous approach. However, it is still not the best way. 
+    -->
   </head>
   <body>
     <button>Click me</button>
     <!--
-    <script  src="script.js"></script> 
+      <script  src="script.js"></script> 
     -->
     <!--
-    This is an old way of doing things and must be done before the </body> tag allowing the html to load and parse
+      This is an old way of doing things. It must be placed before the 
+      </body> tag to allow the HTML to load and parse first. However, it is 
+      not recommended and is the worst of the three ways of including 
+      scripts in this context.
     -->
+    
   </body>
 </html>

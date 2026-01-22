@@ -36,6 +36,36 @@
             const actual=max-13;
             const percentage=actual/max;
             console.log(percentage);
+            /*
+            This type of assignment are discouraged
+            */
+            let x=y=3;
+            console.log(x);
+            console.log(y);
+            x=10;
+            console.log(y);
+            /*
+            A very interesting way of doing assignment of variables
+            */
+            function f() {
+            console.log("F!");
+            return 2;
+            }
+            function g() {
+            console.log("G!");
+            return 3;
+            }
+            console.log("INTERESTING STARTS #################################");
+            y = x = f();
+            console.log(x);
+            console.log(y);
+            y = [f(), x = g()];
+            console.log(x);
+            console.log(y);
+            x=[0,0,0];
+            x[f()] = g();
+            console.log(x);
+            console.log(y);
         </script>
     </body>
 </html>

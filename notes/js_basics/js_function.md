@@ -86,4 +86,4 @@ arguments object
 
 Rest parameters (...args)
 
-# ####################################################################################################################
+The default value of the function parameter if it is another function and no argument value is passed to that parameter than it will call that anoter function every time the function is called

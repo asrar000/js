@@ -86,4 +86,6 @@ arguments object
 
 Rest parameters (...args)
 
-The default value of the function parameter if it is another function and no argument value is passed to that parameter than it will call that anoter function every time the function is called
+2 imporatant things to know about function are:
+(i)The default value of the function parameter if it is another function and no argument value is passed to that parameter than it will call that another function every time the function is called
+(ii)It is always easier to understand a function which gets parameters, works with them and returns a result than a function which gets no parameters, but modifies outer variables as a side effect.

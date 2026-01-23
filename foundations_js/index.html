@@ -86,6 +86,44 @@
 
             console.log(person1.getFullName()); // "Chris Martin"
             console.log(person2.getFullName()); // "Chester Bennington"
+
+            /*Explanation*******************************
+            In JavaScript, you can reassign a variable object as a whole, but you cannot reassign a const object as a 
+            whole. However, for both let/var and const objects, you can update properties, delete properties, and add 
+            new properties. In a sense, you can completely change the contents of a const object by modifying or 
+            deleting all of its properties. Only when an object is frozen using Object.freeze() are property additions, 
+            deletions updates prevented.
+
+    
+
+            In JavaScript:
+            (i)A function is just a value
+            (ii)A method is simply a function stored as an object property
+            So this:
+            person1.getFullName = getFullName;
+
+            means:
+
+            “Store a reference to the function getFullName inside person1 under the key getFullName”
+            Once stored, calling it like this:
+            person1.getFullName();
+            makes it a method call.
+
+            ****Some crucial thing to keep in mind is that
+
+            obj.propertyname=functionname;
+            So the function call so be made by obj.propertyname() not using obj.functionname() it is wrong and another
+            crucial thing is you cannot attach method to an object after object creation but in JS you can do this
+
+            Finally lets talk a little bit about the frozen objects,Now the idea of the frozen object is only the 
+            defined property and methods can be accessed but no update/add/delete of property can be done and as the
+            method to froze an object is shallow so to froze all the nested objects within a frozen object we have 
+            to froze them individually
+
+            *************
+            */
+
+            
         </script>
     </body>
 </html>

@@ -87,6 +87,12 @@
             console.log(person1.getFullName()); // "Chris Martin"
             console.log(person2.getFullName()); // "Chester Bennington"
 
+            let n1=n2=n3=(312*3);
+            console.log(n1);
+            console.log(n2);
+            console.log(n3);
+            //This are discouraged
+
             /*Explanation*******************************
             In JavaScript, you can reassign a variable object as a whole, but you cannot reassign a const object as a 
             whole. However, for both let/var and const objects, you can update properties, delete properties, and add 
@@ -123,7 +129,103 @@
             ###############################################
             */
 
+            /*
+            The JS way of calculation
+            alert(2 + 2 + '1' ); // "41" and not "221"
+            alert('1' + 2 + 2); // "122" and not "14"
+
+            Always remember it goes from left to right
+           
+            console.log('3' * 2);   // 6
+            console.log('3' - 2);   // 1
+            console.log('3' + 2);   // "32"
+            console.log('3' / 2);   // 1.5
+            console.log('3' ** 2);  // 9
+            console.log('3' % 2);   // 1
+
+            #####################
+            The JS + thing,
+            When unary + is applied to a number it does nothing have no change but not wrong but when applied to non 
+            numbers something like string it can change it to number type just like Number() but shorter and something 
+            like "2"+"3" = "23" but something like +"2" + +"3"=5 as the + unary acts like Number()  again something
+            like +"2" + "3"="23" as it converts the string to number however as "3" is string so string concatenation
+            happens
+            And in case of non string numbers something like
+
+            +""=0
+            +"dasdasd"=NaN[Discussed Below]
+            +true=1
+            +false=0
+            ####################
+
+
+            ********************
+            The weird Comma operator in JS
             
+            The comma operator , is one of the rarest and most unusual operators. Sometimes, it’s used to write 
+            shorter code, so we need to know it in order to understand what’s going on.
+            The comma operator allows us to evaluate several expressions, dividing them with a comma ,. Each of them 
+            is evaluated but only the result of the last one is returned.
+
+            For example:
+            let a = (1 + 2, 3 + 4);
+            alert( a ); // 7 (the result of 3 + 4)
+            Here, the first expression 1 + 2 is evaluated and its result is thrown away. Then, 3 + 4 is 
+            evaluated and returned as the result.
+            
+            Comma has a very low precedence
+            Please note that the comma operator has very low precedence, lower than =, so parentheses are important in 
+            the example above.Without them: a = 1 + 2, 3 + 4 evaluates + first, summing the numbers into a = 3, 7, then
+            the assignment operator = assigns a = 3, and the rest is ignored. It’s like (a = 1 + 2), 3 + 4.
+
+            Why do we need an operator that throws away everything except the last expression?
+            Sometimes, people use it in more complex constructs to put several actions in one line.
+
+
+            For example:
+
+
+            // three operations in one line
+
+            for (let a = 1, b = 3, c = a * b; c < 10; c++) {
+            ...
+            }
+            Here,The a,b variables are used for the calculation of c mainly.[One of the uses of comma operator is doing
+            intermediary calulations]
+
+            Such tricks are used in many JavaScript frameworks. That’s why we’re mentioning them. But usually they 
+            don’t improve code readability so we should think well before using them.
+           
+            ############################
+            THE GOLDEN RULES
+            "" + 1 + 0 = "10" // (1)
+            "" - 1 + 0 = -1 // (2)
+            true + false = 1
+            6 / "3" = 2
+            "2" * "3" = 6
+            4 + 5 + "px" = "9px"
+            "$" + 4 + 5 = "$45"
+            "4" - 2 = 2
+            "4px" - 2 = NaN
+            "  -9  " + 5 = "  -9  5" // (3)
+            "  -9  " - 5 = -14 // (4)
+            null + 1 = 1 // (5)
+            undefined + 1 = NaN // (6)
+            " \t \n" - 2 = -2 // (7)
+            (1)The addition with a string "" + 1 converts 1 to a string: "" + 1 = "1", and then we have "1" + 0, the same 
+            rule is applied.
+            (2)The subtraction - (like most math operations) only works with numbers, it converts an empty string "" to 0.
+            (3)The addition with a string appends the number 5 to the string.
+            (4)The subtraction always converts to numbers, so it makes " -9 " a number -9 (ignoring spaces around it).
+            (5)null becomes 0 after the numeric conversion.
+            (6)undefined becomes NaN after the numeric conversion.
+            (7)Space characters are trimmed off string start and end when a string is converted to a number. 
+            Here the whole string consists of space characters, such as \t, \n and a “regular” space between them. 
+            So, similarly to an empty string, it becomes 0
+            
+            */
+
+                
         </script>
     </body>
 </html>

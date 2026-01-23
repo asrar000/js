@@ -1,80 +1,150 @@
-Naming a function
-Functions are actions. So their name is usually a verb. It should be brief, as accurate as possible and describe what the function does, so that someone reading the code gets an indication of what the function does.
+# Function Naming Best Practices
 
-It is a widespread practice to start a function with a verbal prefix which vaguely describes the action. There must be an agreement within the team on the meaning of the prefixes.
+## Functions Represent Actions
 
-For instance, functions that start with "show" usually show something.
+Functions represent **actions**, so their names should usually be **verbs**. A good function name should be:
 
-Function starting with…
+* **Brief**
+* **Accurate**
+* **Descriptive**
 
-"get…" – return a value,
-"calc…" – calculate something,
-"create…" – create something,
-"check…" – check something and return a boolean, etc.
-Examples of such names:
+The goal is that someone reading the code can quickly understand **what the function does** just by reading its name.
 
-showMessage(..)     // shows a message
-getAge(..)          // returns the age (gets it somehow)
-calcSum(..)         // calculates a sum and returns the result
-createForm(..)      // creates a form (and usually returns it)
-checkPermission(..) // checks a permission, returns true/false
-With prefixes in place, a glance at a function name gives an understanding what kind of work it does and what kind of value it returns.
+---
 
-One function – one action
-A function should do exactly what is suggested by its name, no more.
+## Use Verb Prefixes Consistently
 
-Two independent actions usually deserve two functions, even if they are usually called together (in that case we can make a 3rd function that calls those two).
+A widespread and effective practice is to start function names with a **verb prefix** that describes the action being performed.
 
-A few examples of breaking this rule:
+> ⚠️ The entire team should agree on what each prefix means and use them consistently.
 
-getAge – would be bad if it shows an alert with the age (should only get).
-createForm – would be bad if it modifies the document, adding a form to it (should only create it and return).
-checkPermission – would be bad if it displays the access granted/denied message (should only perform the check and return the result).
-These examples assume common meanings of prefixes. You and your team are free to agree on other meanings, but usually they’re not much different. In any case, you should have a firm understanding of what a prefix means, what a prefixed function can and cannot do. All same-prefixed functions should obey the rules. And the team should share the knowledge.
+### Common Prefixes and Their Meanings
 
-Ultrashort function names
-Functions that are used very often sometimes have ultrashort names.
+| Prefix    | Meaning               | Expected Return            |
+| --------- | --------------------- | -------------------------- |
+| `show…`   | Display something     | usually no return          |
+| `get…`    | Retrieve a value      | value                      |
+| `calc…`   | Perform a calculation | calculated result          |
+| `create…` | Create something      | created object             |
+| `check…`  | Perform a check       | boolean (`true` / `false`) |
 
-For example, the jQuery framework defines a function with $. The Lodash library has its core function named _.
+### Examples
 
-These are exceptions. Generally function names should be concise and descriptive.
+```js
+showMessage(..)      // shows a message
+getAge(..)           // returns the age
+calcSum(..)          // calculates and returns a sum
+createForm(..)       // creates and returns a form
+checkPermission(..)  // returns true or false
+```
 
-Functions == Comments
-Functions should be short and do exactly one thing. If that thing is big, maybe it’s worth it to split the function into a few smaller functions. Sometimes following this rule may not be that easy, but it’s definitely a good thing.
+With clear prefixes, a quick glance at a function name tells you:
 
-A separate function is not only easier to test and debug – its very existence is a great comment!
+* **What it does**
+* **What kind of value it returns**
 
-For instance, compare the two functions showPrimes(n) below. Each one outputs prime numbers up to n.
+---
 
-The first variant uses a label:
+## One Function = One Action
 
+A function should do **exactly what its name suggests — nothing more**.
+
+If two independent actions are needed, they usually deserve **two separate functions**. If those actions are commonly used together, you can create a **third function** that calls both.
+
+### ❌ Bad Examples
+
+```js
+getAge()          // ❌ Bad if it also shows an alert
+createForm()      // ❌ Bad if it also adds the form to the DOM
+checkPermission() // ❌ Bad if it also shows access messages
+```
+
+These names imply a **single responsibility**, and adding extra behavior violates that expectation.
+
+> You may define different meanings for prefixes, but once defined, **all functions using the same prefix must follow the same rules**.
+
+---
+
+## Ultrashort Function Names (Rare Exceptions)
+
+Some libraries use extremely short function names:
+
+* jQuery: `$()`
+* Lodash: `_()`
+
+These are **special cases**, usually for functions that are:
+
+* Used very frequently
+* Widely recognized
+
+👉 In general, **avoid ultrashort names** in normal code. Prefer clarity over brevity.
+
+---
+
+## Functions Are Better Than Comments
+
+Well-written functions often act as **self-documenting comments**.
+
+* Functions should be **small**
+* Functions should do **one thing**
+* Large logic should be split into **smaller functions**
+
+This makes code:
+
+* Easier to read
+* Easier to test
+* Easier to debug
+
+---
+
+## Example: Improving Readability with Functions
+
+### ❌ Less Readable Version
+
+```js
 function showPrimes(n) {
-  nextPrime: for (let i = 2; i < n; i++) {
-
+  nextPrime:
+  for (let i = 2; i < n; i++) {
     for (let j = 2; j < i; j++) {
       if (i % j == 0) continue nextPrime;
     }
-
-    alert( i ); // a prime
+    alert(i); // a prime
   }
 }
-The second variant uses an additional function isPrime(n) to test for primality:
+```
 
+### ✅ More Readable Version (Self-Describing Code)
+
+```js
 function showPrimes(n) {
-
   for (let i = 2; i < n; i++) {
     if (!isPrime(i)) continue;
-
-    alert(i);  // a prime
+    alert(i); // a prime
   }
 }
 
 function isPrime(n) {
   for (let i = 2; i < n; i++) {
-    if ( n % i == 0) return false;
+    if (n % i == 0) return false;
   }
   return true;
 }
-The second variant is easier to understand, isn’t it? Instead of the code piece we see a name of the action (isPrime). Sometimes people refer to such code as self-describing.
+```
 
-So, functions can be created even if we don’t intend to reuse them. They structure the code and make it readable.
+### Why This Is Better
+
+* `isPrime()` clearly describes **what the check does**
+* The logic reads almost like natural language
+* The code is **self-describing**
+
+---
+
+## Key Takeaways
+
+* Use **verbs** for function names
+* Use **consistent prefixes**
+* One function should perform **one action only**
+* Prefer **clarity over cleverness**
+* Functions often replace the need for comments
+
+> Clean function names make your code readable, maintainable, and professional.

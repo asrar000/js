@@ -115,5 +115,17 @@ The reason is that an equality check == and comparisons > < >= <= work different
 On the other hand, the equality check == for undefined and null is defined such that, without any conversions, they equal each other and don’t equal anything else. That’s why (2) null == 0 is false.
 
 
+## A OR(||) Mistake
+```js
+if (x === 5 || 7 || 10 || 20) {
+  /*
+ This is a wrong approach, as even if x is not equal to 5,7 is a true value, so it will always return
+ But the below if statement is a correct implementation.
+*/
+}
+if(x === 5 || x === 7 || x === 10 || x === 20){
+}
+```
+
 
 

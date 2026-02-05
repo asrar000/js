@@ -6,6 +6,7 @@ In such a case, switch statements are your friend — they take a single express
 
 ```js
 switch (expression) {
+  //Very important that is swtich statement by default is strict equality
   case choice1:
     // run this code
     break;
@@ -24,6 +25,100 @@ switch (expression) {
   */
 }
 ```
+
+### An important note about switch statmeent in js
+# JavaScript Switch Statements - Equality and Complex Expressions
+
+## Overview
+
+Switch statements are **primarily designed for equality checks**, but there are some nuances worth understanding.
+
+## Standard Switch (Equality Only)
+
+The standard switch uses **strict equality (`===`)** to compare the switch expression with each case:
+
+```javascript
+switch (value) {
+  case 1:
+    // executes if value === 1
+    break;
+  case 'hello':
+    // executes if value === 'hello'
+    break;
+}
+```
+
+## You Can Use Expressions in Cases
+
+While the comparison is equality-based, you **can** use expressions in your case values:
+
+```javascript
+const x = 5;
+switch (x) {
+  case 2 + 3:  // evaluates to 5
+    console.log('matched!');
+    break;
+  case Math.max(1, 2):  // evaluates to 2
+    console.log('not matched');
+    break;
+}
+```
+
+## Workaround for Complex Conditions
+
+For complex conditions, you can use `switch(true)` as a pattern:
+
+```javascript
+const age = 25;
+
+switch (true) {
+  case age < 18:
+    console.log('Minor');
+    break;
+  case age >= 18 && age < 65:
+    console.log('Adult');
+    break;
+  case age >= 65:
+    console.log('Senior');
+    break;
+}
+```
+
+This works because each case expression is evaluated, and if it's `true`, it matches `switch(true)`.
+
+## When to Use What
+
+- **Simple equality checks** → use standard switch
+- **Complex conditions/ranges** → use if-else or switch(true), Here the if-else conditional block is more readable than
+switch(true)
+- **Readability matters** → if-else is often clearer for complex logic
+
+## Conclusion
+
+While switch is fundamentally equality-based, there are creative ways to handle more complex scenarios if needed. 
+
+### Simple switch statement mainly focusing on the grouping of case statement
+
+```js
+let a = 3;
+
+switch (a) {
+  case 4:
+    alert('Right!');
+    break;
+
+  case 3: // (*) grouped two cases
+  case 5:
+    alert('Wrong!');
+    alert("Why don't you take a math class?");
+    break;
+  //Here we can see that  no OR(||) is used and also no identation of case 5 under case 3 
+  default:
+    alert('The result is strange. Really.');
+}
+```
+
+
 ### A Complex ternay operator example
 
 ```js
@@ -38,6 +133,7 @@ if (login === 'Employee') {
 } else {
   message = '';
 }
+
 
 /*
 This is an if–else if–else block written using strict comparison (===).

@@ -118,6 +118,10 @@ switch (a) {
 }
 ```
 
+### ❗❗❗ Dont forget the break statement
+It is good practice to include a break statement in the default case, even if your current code does not require it. In the future, you may add new case statements after the last existing one and forget to include a break, assuming it is not necessary. To avoid this risk, it is a good idea to always add a break statement to the last case statement as well. This helps prevent unintentional fall-through behavior and potential bugs when the code is modified later.
+***Summary Add break statement always even to default and without default the last case statement for future proofing*** 
+
 
 ### A Complex ternay operator example
 

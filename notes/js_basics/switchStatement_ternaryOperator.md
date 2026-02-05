@@ -24,3 +24,33 @@ switch (expression) {
   */
 }
 ```
+### A Complex ternay operator example
+
+```js
+let message;
+
+if (login === 'Employee') {
+  message = 'Hello';
+} else if (login === 'Director') {
+  message = 'Greetings';
+} else if (login === '') {
+  message = 'No login';
+} else {
+  message = '';
+}
+
+/*
+This is an if–else if–else block written using strict comparison (===).
+Now the same logic will be converted into a complex ternary operator.
+*/
+
+message = login === 'Employee' ? 'Hello' :
+          login === 'Director' ? 'Greetings' :
+          login === '' ? 'No login' : '';
+
+/*
+This form of complex ternary operator is discouraged  
+because it reduces code readability.
+*/
+
+```

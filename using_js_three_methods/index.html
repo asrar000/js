@@ -4,35 +4,72 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>Apply JavaScript example</title>
+
+    <!-- 
+      Recommended modern approach.
+      Module scripts automatically behave like "defer":
+      - Download in parallel.
+      - Do not block HTML parsing.
+      - Execute after HTML is fully parsed.
+      - Run in strict mode.
+      - Have module scope (no global pollution).
+
+      If ES module imports are used, the file should be served
+      through a local or remote server. Opening via file:// may
+      cause CORS-related errors.
+    -->
     <script type="module" src="script.js"></script>
-    <!--
-      This is the best and most modern way of using external JavaScript. 
-      Here, defer is enabled by default, so there is no need to explicitly
-      use the keyword. This approach is recommended. One thing to note is 
-      that it will give you a CORS error if you try to access it without 
-      setting up a server.
+
+    <!-- 
+      Alternative modern approach.
+      The "defer" attribute ensures:
+      - Script downloads in parallel.
+      - Execution happens after HTML parsing completes.
+      - Execution order is preserved.
     -->
-    <!--
-      <script defer src="script.js"></script>
+    <!-- <script defer src="script.js"></script> -->
+
+    <!-- 
+      Traditional blocking script in <head>.
+      - Stops HTML parsing.
+      - Downloads and executes immediately.
+      - Not recommended for performance.
     -->
-    <!--
-      This method is slightly more modern than the oldest one and is 
-      somewhat better in the sense that it defers execution until the 
-      HTML loads properly. As a result, DOM access is safer than with 
-      the previous approach. However, it is still not the best way. 
-    -->
+    <!-- <script src="script.js"></script> -->
   </head>
+
   <body>
     <button>Click me</button>
-    <!--
-      <script  src="script.js"></script> 
+
+    <!-- 
+      If a normal script (without defer or module) is placed 
+      at the start of <body>, like this:
+
+      <body>
+        <script src="script.js"></script>
+        <button>Click me</button>
+
+      The browser:
+      1. Stops parsing HTML.
+      2. Downloads and runs the script.
+      3. The button is not yet in the DOM.
+
+      Therefore, document.querySelector("button") would return null.
     -->
-    <!--
-      This is an old way of doing things. It must be placed before the 
-      </body> tag to allow the HTML to load and parse first. However, it is 
-      not recommended and is the worst of the three ways of including 
-      scripts in this context.
+
+    <!-- 
+      Older safe practice:
+      Place a normal script just before </body>.
+      This ensures the entire DOM is parsed before execution.
     -->
-    
+    <!-- 
+    <script src="script.js"></script>
+    -->
+
+    <!-- 
+      "defer" and "type=module" scripts can technically be placed
+      inside <body>, but it is unnecessary because they already wait
+      for HTML parsing to complete. They are typically placed in <head>.
+    -->
   </body>
 </html>

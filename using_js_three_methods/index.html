@@ -4,81 +4,192 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>Apply JavaScript example</title>
+
     <!--
-      IMPORTANT
-      
-      If a script has an error:
-      (*)It still downloads.
-      (*)If it has a SyntaxError, it will not execute at all.
-      (*)If it has a runtime error, it executes until the error, then stops.
-      (*)Other separate script tags will still run.
+      IMPORTANT: What happens when scripts have errors?
+
+      - The browser still downloads the script file.
+      - SyntaxError:
+        * Happens during parsing (before execution).
+        * The script does not execute at all (not even partially).
+      - Runtime error (e.g., ReferenceError at runtime):
+        * Parsing succeeds and execution starts.
+        * Execution continues until the line that throws, then stops for that script.
+      - Other separate <script> tags will still run, even if one script fails.
     -->
 
-    <!-- 
-      Recommended modern approach.
-      Module scripts automatically behave like "defer":
-      - Download in parallel.
-      - Do not block HTML parsing.
-      - Execute after HTML is fully parsed.
-      - Run in strict mode.
-      - Have module scope (no global pollution).
+    <!--
+      SCRIPT LOADING OPTIONS
 
-      If ES module imports are used, the file should be served
-      through a local or remote server. Opening via file:// may
-      cause CORS-related errors.
+      1) Classic script (no attributes)
+         <script src="script.js"></script>
+
+         - Blocks HTML parsing while it downloads and executes.
+         - If placed early (in <head> or at the start of <body>), it can run
+           before the DOM elements exist, so DOM queries may return null.
+         - Old practice: place it just before </body> so the DOM is already parsed.
+
+      2) defer (classic script with deferred execution)
+         <script defer src="script.js"></script>
+
+         - Downloads in parallel while HTML is parsing.
+         - Executes after HTML parsing completes.
+         - Preserves execution order.
+         - Important: defer changes timing, NOT scope.
+           It is still a classic script and still shares the global scope.
+
+      3) type="module" (ES module)
+         <script type="module" src="script.js"></script>
+
+         - Downloads in parallel while HTML is parsing (deferred by default).
+         - Executes after HTML parsing completes.
+         - Preserves order (like defer).
+         - Runs in strict mode.
+         - Has module scope (top-level declarations do not leak to the global scope).
+         - Modules often require a server when using imports; file:// may cause
+           CORS-related issues in many setups.
+    -->
+
+    <!--
+      Recommended modern approach: ES module in <head>.
+      This is safe for DOM access because module scripts are deferred by default.
     -->
     <script type="module" src="script.js"></script>
 
-    <!-- 
-      Alternative modern approach.
-      The "defer" attribute ensures:
-      - Script downloads in parallel.
-      - Execution happens after HTML parsing completes.
-      - Execution order is preserved.
+    <!--
+      Alternative modern approach: defer in <head>.
+      Also safe for DOM access, but it remains a classic script (global scope).
     -->
     <!-- <script defer src="script.js"></script> -->
 
-    <!-- 
-      Traditional blocking script in <head>.
-      - Stops HTML parsing.
-      - Downloads and executes immediately.
-      - Not recommended for performance.
+    <!--
+      Traditional blocking script in <head> (not recommended for performance).
     -->
     <!-- <script src="script.js"></script> -->
+
+    <!--
+      SCOPE / REDECLARATION ISSUE EXAMPLE
+
+      Problem scenario (classic scripts: normal and/or defer):
+      ------------------------------------------------------
+
+      Example HTML (classic scripts):
+        <script src="first.js"></script>
+        <script src="second.js"></script>
+        <script>
+          greeting();
+        </script>
+
+      first.js:
+        const name = "Chris";
+        function greeting() {
+          alert(`Hello ${name}: welcome to our company.`);
+        }
+
+      second.js:
+        const name = "Zaptec";
+        function greeting() {
+          alert(`Our company is called ${name}.`);
+        }
+
+      What happens and why (classic scripts):
+      - Normal scripts and "defer" scripts are both classic scripts.
+      - Classic scripts share the same global (top-level) scope.
+      - first.js declares: const name = "Chris";
+        then second.js tries to declare: const name = "Zaptec";
+        This causes a SyntaxError: Identifier 'name' has already been declared.
+      - Because it is a SyntaxError, second.js does not execute at all.
+        Therefore, greeting() from second.js is never created.
+
+      Why "defer" does not solve it:
+      - defer only changes when the script runs (after parsing).
+      - defer does not isolate scope.
+      - So the redeclaration SyntaxError still happens.
+
+      How modules solve it:
+      --------------------
+
+      Example HTML (modules):
+        <script type="module" src="first.js"></script>
+        <script type="module" src="second.js"></script>
+
+      Why the error does not happen:
+      - Each module has its own module scope.
+      - Top-level const/let in one module does not collide with top-level const/let
+        in another module.
+
+      Important consequence of module isolation:
+      - If both modules define function greeting(), both exist, but each is private
+        to its module by default.
+      - You cannot call greeting() from outside (e.g., from a classic <script> tag)
+        unless you explicitly export/import it, or intentionally attach it to window.
+
+      Calling greeting() when both scripts are modules:
+      ------------------------------------------------
+      This will fail (greeting is not global):
+        <script type="module" src="first.js"></script>
+        <script type="module" src="second.js"></script>
+        <script>
+          greeting(); // ReferenceError: greeting is not defined
+        </script>
+
+      Correct way (export/import):
+        first.js:
+          export function greeting() { ... }
+
+        second.js:
+          export function greeting() { ... }
+
+        main.js:
+          import { greeting as greeting1 } from "./first.js";
+          import { greeting as greeting2 } from "./second.js";
+          greeting1();
+          greeting2();
+
+        HTML:
+          <script type="module" src="main.js"></script>
+
+      Mixing classic scripts and modules:
+      ---------------------------------
+      - If one script is classic (normal or defer) and the other is a module,
+        top-level const/let declarations do not collide because they are in
+        different scopes (global scope vs module scope).
+      - However, module declarations are not automatically available globally, so
+        classic scripts cannot directly call functions defined in a module unless
+        they are explicitly exposed (e.g., via exports/imports or window assignment).
+    -->
   </head>
 
   <body>
     <button>Click me</button>
 
-    <!-- 
-      If a normal script (without defer or module) is placed 
-      at the start of <body>, like this:
+    <!--
+      PLACEMENT IN <body> AND DOM ACCESS
 
-      <body>
-        <script src="script.js"></script>
-        <button>Click me</button>
+      Classic script at the start of <body>:
+        <body>
+          <script src="script.js"></script>
+          <button>Click me</button>
 
-      The browser:
-      1. Stops parsing HTML.
-      2. Downloads and runs the script.
-      3. The button is not yet in the DOM.
+      What happens:
+      - The browser encounters the script and pauses HTML parsing.
+      - The script downloads and executes immediately.
+      - At that moment, the <button> has not been parsed yet.
+      - So document.querySelector("button") would return null.
 
-      Therefore, document.querySelector("button") would return null.
+      Older safe practice for classic scripts:
+      - Place the classic script just before </body> so the DOM is fully parsed:
+          <button>Click me</button>
+          <script src="script.js"></script>
+        </body>
+
+      Modern practice:
+      - Use <script defer ...> or <script type="module" ...> in <head>,
+        since they already wait for HTML parsing to finish.
+      - "defer" and "type=module" can technically be placed in <body>,
+        but it is usually unnecessary.
     -->
 
-    <!-- 
-      Older safe practice:
-      Place a normal script just before </body>.
-      This ensures the entire DOM is parsed before execution.
-    -->
-    <!-- 
-    <script src="script.js"></script>
-    -->
-
-    <!-- 
-      "defer" and "type=module" scripts can technically be placed
-      inside <body>, but it is unnecessary because they already wait
-      for HTML parsing to complete. They are typically placed in <head>.
-    -->
+    <!-- <script src="script.js"></script> -->
   </body>
 </html>
